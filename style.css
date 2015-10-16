@@ -1,0 +1,68 @@
+.header .btn--createTour {
+  margin-top: 14px;
+}
+
+.navbar-default {
+  min-height: 100px;
+}
+
+.header {
+  padding: 20px 0 20px 0;
+}
+
+.header__img {
+  width: 60px;
+  height: 60px;
+}
+
+.header__brand {
+  font-size: 25px;
+  color: #000;
+}
+
+.tour-price {
+  margin-top: 25px;
+  font-size: 18px;
+}
+
+.tour {
+  min-width: 600px;
+  font-size: 0;
+}
+
+.tour__imgWrapper {
+  display: inline-block;
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+  margin-top: 25px;
+  vertical-align: top;
+}
+
+.tour__desc {
+  display: inline-block;
+  width: calc(100% - 170px);
+  vertical-align: top;
+  font-size: 16px;
+}
+
+.tour__descInputTitle {
+  width: 150px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.tour__descInputPrice {
+  width: 150px;
+  font-size: 18px;
+  text-align: right;
+}
+
+.tour_descInputWrapper {
+  padding-top: 25px;
+  margin-bottom: 10px;
+}
+
+.tour__descInputText {
+  margin-bottom: 5px;
+}
