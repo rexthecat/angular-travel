@@ -41,12 +41,12 @@
       </div>
       <div class="form-group">
         <button class="btn btn-default" type="button" ng-click="addTour()">Добавить</button>
-        <button class="btn btn-default" type="button" ng-click="cancelSave()">Отменить</button>
+        <button class="btn btn-default" type="button" ng-click="cancelCreate()">Отменить</button>
       </div>
     </form>
   </div>
   <div class="container">
-    <div class="tour" ng-repeat="tour in tours | orderBy:'-'">
+    <div class="tour" ng-repeat="tour in tours">
         <div class="tour__imgWrapper">
           <img class="tour__img" width="150" height="150" src="http://placehold.it/150x150" alt="Image of the tour"/>
         </div>
@@ -58,7 +58,7 @@
           <div>{{tour.text}}</div>
           <div class="btn-group pull-right">
             <button class="btn btn-link" type="button" ng-click="editTour(tour)">Редактировать</button>
-            <button class="btn btn-link" type="button" ng-click="removeTour(tour)">Удалить</button>
+            <button class="btn btn-link" type="button" ng-click="removeTour(tour, $index)">Удалить</button>
           </div>
         </div>
         <div class="tour__desc tour__desc--edit" ng-show="tour.hide">
