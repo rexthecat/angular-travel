@@ -1,81 +1,37 @@
 <!DOCTYPE html>
 <html ng-app="tnTour">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Welcome to ThTour!</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-  <link rel="stylesheet" href="style.css"/>
+  <base href="/">
 </head>
+<body>
+  <div class="header">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">THTOUR</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a ng-href="/">Туры</a></li>
+          <li><a ng-href="/admin/countries">Редактировать страны</a></li>
+          <li><a ng-href="/admin/tours">Редактировать туры</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 
-<body ng-controller="MainController">
-<header class="header">
-  <div class="container clearfix">
-    <a class="header__logoLink pull-left" href="#">
-      <span class="header__brand">ThTour</span>
-    </a>
-    <button class="btn btn-default btn--createTour pull-right" ng-click="showForm = !showForm" ng-disabled="showForm"
-            ng-class="{disabled: showForm}">Добавить тур</button>
-  </div>
-</header>
-<main class="main">
-  <div class="container" ng-show="showForm">
-    <form>
-      <div class="row">
-        <div class="form-group col-lg-6 col-md-6 col-xs-12">
-          <input class="form-control" type="text" placeholder="Название тура" ng-model="newTour.title">
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-lg-4 col-md-4 col-xs-12">
-          <input class="form-control" type="number" placeholder="Цена" ng-model="newTour.price">
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-lg-12 col-md-12 col-xs-12">
-        <textarea class="form-control" type="text" rows="5" placeholder="Описание тура"
-                  ng-model="newTour.text"></textarea>
-        </div>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-default" type="button" ng-click="addTour()">Добавить</button>
-        <button class="btn btn-default" type="button" ng-click="cancelCreate()">Отменить</button>
-      </div>
-    </form>
-  </div>
-  <div class="container">
-    <div class="tour" ng-repeat="tour in tours">
-        <div class="tour__imgWrapper">
-          <img class="tour__img" width="150" height="150" src="http://placehold.it/150x150" alt="Image of the tour"/>
-        </div>
-        <div class="tour__desc" ng-show="!tour.hide">
-          <div class="clearfix">
-            <h2 class="pull-left">{{tour.title}}</h2>
-            <div class="pull-right tour-price">{{tour.price | currency:"": 0}} &#8381;</div>
-          </div>
-          <div>{{tour.text}}</div>
-          <div class="btn-group pull-right">
-            <button class="btn btn-link" type="button" ng-click="editTour(tour)">Редактировать</button>
-            <button class="btn btn-link" type="button" ng-click="removeTour(tour, $index)">Удалить</button>
-          </div>
-        </div>
-        <div class="tour__desc tour__desc--edit" ng-show="tour.hide">
-          <div class="tour_descInputWrapper clearfix">
-            <input type="text" class="pull-left form-control  tour__descInputTitle" ng-model="tour.title">
-            <input type="number" class="pull-right form-control tour__descInputPrice" ng-model="tour.price">
-          </div>
-          <textarea type="text" class="form-control tour__descInputText" rows="4" type="text" ng-model="tour.text"></textarea>
-          <div class="pull-right">
-            <button class="btn btn-default" type="button" ng-click="saveChanges(tour)">Сохранить</button>
-            <button class="btn btn-default" type="button" ng-click="cancelEdit(tour)">Отмена</button>
-          </div>
-        </div>
-    </div>
-  </div>
-</main>
+  <ng-view></ng-view>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min.js"></script>
 <script src="app.js"></script>
+<script src="controllers/tours/TourListController.js"></script>
+<script src="controllers/tours/TourController.js"></script>
+<script src="controllers/admin/AdminTourListController.js"></script>
+<script src="controllers/admin/AdminCountryListController.js"></script>
 </body>
-
 </html>
