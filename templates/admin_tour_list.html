@@ -1,0 +1,82 @@
+<div class="container">
+  <p>
+    <button type="button" class="btn btn-default" ng-click="showForm = !showForm" ng-disabled="showForm"
+            ng-class="{disabled: showForm}">Добавить тур</button>
+  </p>
+  <form ng-show="showForm">
+    <div class="row">
+      <div class="form-group col-lg-6 col-md-6 col-xs-12">
+        <input class="form-control" type="text" placeholder="Название тура" ng-model="newTour.title">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-lg-4 col-md-4 col-xs-12">
+        <input class="form-control" type="text" placeholder="Slug" ng-model="newTour.slug">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-lg-4 col-md-4 col-xs-12">
+        <select class="form-control" ng-model="newCountry" ng-options="c.name as c.name for c in countries">
+          <option value="empty">Выберите страну</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-lg-4 col-md-4 col-xs-12">
+        <input class="form-control" type="number" placeholder="Цена" ng-model="newTour.price">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-lg-12 col-md-12 col-xs-12">
+        <textarea class="form-control" type="text" rows="5" placeholder="Описание тура"
+                ng-model="newTour.text"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="clearfix">
+        <div class="form-group pull-right">
+          <button class="btn btn-default" type="button" ng-click="createTour()">Добавить</button>
+          <button class="btn btn-default" type="button" ng-click="cancelCreate()">Отменить</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="media" ng-repeat="tour in tours">
+    <div class="media-left">
+      <a href="#">
+        <img class="media-object" width="150" height="150" ng-src="http://placehold.it/150x150" alt="Image of the tour">
+      </a>
+    </div>
+    <div class="media-body" ng-hide="tour.hide">
+      <div class="clearfix">
+        <h3 class="media-heading pull-left">{{tour.title}} <span class="label label-primary">{{tour.country}}</span></h3>
+        <big class="media-heading pull-right">{{tour.price | currency:"": 0}} &#8381;</big>
+      </div>
+      <p>{{tour.text}}</p>
+      <div class="clearfix">
+        <button class="btn btn-link pull-right" type="button" name="button" ng-click="deleteTour(tour, $index)">Удалить</button>
+        <button class="btn btn-link pull-right" type="button" name="button" ng-click="editTour(tour)">Редактировать</button>
+      </div>
+    </div>
+    <form class="media-body" ng-show="tour.hide">
+      <div class="row">
+        <div class="form-group col-xs-4">
+          <input class="form-control input-large" type="text" name="title" placeholder="Название тура" ng-model="tour.title">
+        </div>
+        <div class="form-group col-xs-4">
+          <select class="form-control" ng-model="tour.country" ng-options="country.name as country.name for country in countries"></select>
+        </div>
+        <div class="form-group col-xs-4">
+          <input class="form-control text-right" type="number" name="price" placeholder="Цена" ng-model="tour.price">
+        </div>
+        <div class="form-group col-xs-12">
+          <textarea class="form-control" type="text" rows="4" ng-model="tour.text">{{tour.text}}</textarea>
+        </div>
+        <div class="form-group col-xs-12 text-right">
+          <button class="btn btn-default" type="button" name="button" ng-click="saveChanges(tour)">Сохранить</button>
+          <button class="btn btn-default" type="button" ng-click="cancelEdit(tour)">Отмена</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

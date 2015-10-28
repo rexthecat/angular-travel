@@ -1,0 +1,33 @@
+<main>
+  <div class="container">
+    <h1>Страны:</h1>
+    <form>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="form-group">
+            <input class="form-control" type="text" placeholder="Страна" ng-model="newCountry.name">
+          </div>
+        </div>
+        <button class="btn btn-default" type="button" ng-click="createCountry()">Добавить</button>
+        </div>
+    </form>
+    <table class="table">
+      <tr class="row" ng-repeat="country in countries">
+        <td>
+            <h4 class="pull-left" ng-hide="country.isInEdit">{{country.name}}</h4>
+            <input class="form-control pull-left" type="text" ng-model="country.name" ng-show="country.isInEdit">
+        </td>
+        <td>
+          <div class="button-group pull-right" ng-hide="country.isInEdit">
+            <button class="btn btn-link" type="button" ng-click="editCountry(country)">Редактировать</button>
+            <button class="btn btn-link" type="button" ng-click="deleteCountry($index)">Удалить</button>
+          </div>
+          <div class="button-group pull-right" ng-show="country.isInEdit">
+            <button class="btn btn-default" type="button" ng-click="saveChanges(country)">Сохранить</button>
+            <button class="btn btn-default" type="button" ng-click="cancelEdit(country)">Отмена</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</main>

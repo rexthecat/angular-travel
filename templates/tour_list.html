@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-4">
+      <select class="form-control" ng-model="countryQuery" ng-options="country.name for country in countries">
+        <option value="">Все</option>
+      </select>
+    </div>
+  </div>
+  <div class="media" ng-repeat="tour in tours | filter:countryQuery.name || undefined">
+    <div class="media-left">
+      <a href="#">
+        <img class="media-object" width="150" height="150" ng-src="http://placehold.it/150x150" alt="Image of the tour">
+      </a>
+    </div>
+    <div class="media-body">
+      <div class="clearfix">
+        <h3 class="media-heading pull-left"><a ng-href="/#/tours/{{tour.slug}}">{{tour.title}}</a> <span class="label label-primary">{{tour.country}}</span></h3>
+        <big class="media-heading pull-right">{{tour.price | currency:"": 0}} &#8381;</big>
+      </div>
+      <p>{{tour.text}}</p>
+    </div>
+  </div>
+</div>
