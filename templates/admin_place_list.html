@@ -1,0 +1,33 @@
+<main>
+  <div class="container">
+    <h1>Страны:</h1>
+    <form>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="form-group">
+            <input class="form-control" type="text" placeholder="Места" ng-model="newPlace.name">
+          </div>
+        </div>
+        <button class="btn btn-default" type="button" ng-click="createPlace()">Добавить</button>
+      </div>
+    </form>
+    <table class="table">
+      <tr class="row" ng-repeat="place in places | orderBy: '-createdAt'">
+        <td>
+          <h4 class="pull-left" ng-hide="place.isInEdit">{{place.name}}</h4>
+          <input class="form-control pull-left" type="text" ng-model="place.name" ng-show="place.isInEdit">
+        </td>
+        <td>
+          <div class="button-group pull-right" ng-hide="place.isInEdit">
+            <button class="btn btn-link" type="button" ng-click="editPlace(place)">Редактировать</button>
+            <button class="btn btn-link" type="button" ng-click="deletePlace(place)">Удалить</button>
+          </div>
+          <div class="button-group pull-right" ng-show="place.isInEdit">
+            <button class="btn btn-default" type="button" ng-click="saveChanges(place)">Сохранить</button>
+            <button class="btn btn-default" type="button" ng-click="cancelEdit(place)">Отмена</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</main>

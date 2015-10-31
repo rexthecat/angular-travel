@@ -8,30 +8,32 @@
   <base href="/">
 </head>
 <body>
-  <div class="header">
-    <nav class="navbar navbar-default">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">THTOUR</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li><a ng-href="/">Туры</a></li>
-          <li><a ng-href="/admin/countries">Редактировать страны</a></li>
-          <li><a ng-href="/admin/tours">Редактировать туры</a></li>
-        </ul>
+<div class="header">
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">THTOUR</a>
       </div>
-    </nav>
-  </div>
+      <ul class="nav navbar-nav">
+        <li><a ng-href="/">Туры</a></li>
+        <li><a ng-href="/admin/countries">Редактировать страны</a></li>
+        <li><a ng-href="/admin/places">Редактировать места</a></li>
+        <li><a ng-href="/admin/tours">Редактировать туры</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
 
-  <ng-view></ng-view>
+<ng-view></ng-view>
 
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-resource.min.js"></script>
 <script src="app.js"></script>
 <script src="controllers/tours/TourListController.js"></script>
 <script src="controllers/tours/TourController.js"></script>
 <script src="controllers/admin/AdminTourListController.js"></script>
 <script src="controllers/admin/AdminCountryListController.js"></script>
+<script src="controllers/admin/AdminPlaceListController.js"></script>
 </body>
 </html>
