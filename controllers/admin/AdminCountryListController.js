@@ -1,31 +1,70 @@
 angular.module('tnTour').controller('AdminCountryListController', AdminCountryListController);
 
-function AdminCountryListController($scope) {
-  $scope.currentCountryName = null;
+function AdminCountryListController($scope, $resource) {
+
+  function parseResults(data) {
+    data = angular.fromJson(data);
+    return data.results;
+  }
+
+  var Country = $resource(
+    'https://api.parse.com/1/classes/Country/:objectId',
+    {objectId: '@objectId'},
+    {query: {isArray: true, transformResponse: parseResults},
+      update: {method: 'PUT'}}
+  );
+
+  $scope.countries = Country.query();
   $scope.newCountry = {name: null};
-  $scope.countries = COUNTRIES;
 
   $scope.createCountry = function() {
-    $scope.countries.unshift(angular.copy($scope.newCountry));
-    $scope.newCountry.name = null;
+    var countryToServer = new Country($scope.newCountry);
+    countryToServer.$save().then(
+      function(country) {
+        var countryFromServer = angular.extend(country, $scope.newCountry);
+        $scope.countries.push(countryFromServer);
+        $scope.newCountry.name = null;
+      }
+    ).catch(function(reason) {
+        console.log('Error occurred: ' + reason.error);
+      });
   };
 
   $scope.editCountry = function(country) {
     country.isInEdit = true;
-    $scope.currentCountryName = country.name;
-  };
-
-  $scope.deleteCountry = function(idx) {
-    $scope.countries.splice(idx, 1);
+    country.currentCountry = angular.copy(country);
   };
 
   $scope.cancelEdit = function(country) {
-    country.name = $scope.currentCountryName;
-
     country.isInEdit = false;
+    country.name = country.currentCountry.name;
+
+    delete country.currentCountry;
+
   };
 
   $scope.saveChanges = function(country) {
-    country.isInEdit = false;
+    delete country.isInEdit;
+    delete country.currentCountry;
+
+    var countryToServer = new Country(country);
+    countryToServer.$update().then(
+      function(respCountry) {
+        country = respCountry;
+      }).catch(function(reason) {
+        console.log('Error occurred: ' + reason.error);
+      });
+  };
+
+  $scope.deleteCountry = function(country) {
+    var countryToServer = new Country(country);
+    countryToServer.$delete().then(
+      function() {
+        var index = $scope.countries.indexOf(country);
+        $scope.countries.splice(index, 1);
+      }
+    ).catch(function(reason) {
+        console.log('Error occurred: ' + reason.error);
+      });
   };
 }

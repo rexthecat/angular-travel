@@ -9,18 +9,18 @@
           </div>
         </div>
         <button class="btn btn-default" type="button" ng-click="createCountry()">Добавить</button>
-        </div>
+      </div>
     </form>
     <table class="table">
-      <tr class="row" ng-repeat="country in countries">
+      <tr class="row" ng-repeat="country in countries | orderBy: '-createdAt'">
         <td>
-            <h4 class="pull-left" ng-hide="country.isInEdit">{{country.name}}</h4>
-            <input class="form-control pull-left" type="text" ng-model="country.name" ng-show="country.isInEdit">
+          <h4 class="pull-left" ng-hide="country.isInEdit">{{country.name}}</h4>
+          <input class="form-control pull-left" type="text" ng-model="country.name" ng-show="country.isInEdit">
         </td>
         <td>
           <div class="button-group pull-right" ng-hide="country.isInEdit">
             <button class="btn btn-link" type="button" ng-click="editCountry(country)">Редактировать</button>
-            <button class="btn btn-link" type="button" ng-click="deleteCountry($index)">Удалить</button>
+            <button class="btn btn-link" type="button" ng-click="deleteCountry(country)">Удалить</button>
           </div>
           <div class="button-group pull-right" ng-show="country.isInEdit">
             <button class="btn btn-default" type="button" ng-click="saveChanges(country)">Сохранить</button>
