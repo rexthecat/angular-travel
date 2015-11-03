@@ -43,16 +43,13 @@ function AdminPlaceListController($scope, $resource) {
   };
 
   $scope.saveChanges = function(place) {
-    place.isInEdit = false;
-
     delete place.isInEdit;
     delete place.currentPlace;
 
     var placeToServer = new Place(place);
     placeToServer.$update().then(
-      function(place) {
-        var index = $scope.places.indexOf(place);
-        $scope.places[index] = place;
+      function(respPlace) {
+        place = respPlace;
       }).catch(function (reason) {
         console.log('Error occurred: ' + reason.error);
       });

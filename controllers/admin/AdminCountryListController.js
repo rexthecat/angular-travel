@@ -44,17 +44,14 @@ function AdminCountryListController($scope, $resource) {
   };
 
   $scope.saveChanges = function(country) {
-    country.isInEdit = false;
-
     delete country.isInEdit;
     delete country.currentCountry;
 
     var countryToServer = new Country(country);
     countryToServer.$update().then(
-      function(country) {
-        var index = $scope.countries.indexOf(country);
-        $scope.countries[index] = country;
-      }).catch(function (reason) {
+      function(respCountry) {
+        country = respCountry;
+      }).catch(function(reason) {
         console.log('Error occurred: ' + reason.error);
       });
   };

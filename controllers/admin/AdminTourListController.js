@@ -88,15 +88,15 @@ function AdminTourListController($scope, $resource) {
   };
 
   $scope.saveChanges = function(tour) {
-    tour.hide = !tour.hide;
     delete tour.hide;
     delete tour.currentTour;
 
     var tourToServer = new Tour(tour);
     tourToServer.$update().then(
-      function(tour) {
-        var index = $scope.tours.indexOf(tour);
-        $scope.tours[index] = tour;
+      function(respTour) {
+        //var index = $scope.tours.indexOf(tour);
+        //$scope.tours[index] = tour;
+        tour = respTour;
       }).catch(function(reason) {
         console.log('Error occurred: ' + reason.error);
       });
