@@ -1,6 +1,6 @@
 angular.module('tnTour').controller('TourListController', TourListController);
 
-function TourListController($scope, $resource) {
+function TourListController($scope, $resource, $q) {
 
   function parseResults(data) {
     var data = angular.fromJson(data);
@@ -10,7 +10,7 @@ function TourListController($scope, $resource) {
   var Tour = $resource(
     'https://api.parse.com/1/classes/Tour/:objectId',
     {objectId: '@objectId'},
-    {query: {isArray: true, transformResponse: parseResults}}
+    {query: {isArray: true, transformResponse: parseResults, params: {include: 'place'}}}
   );
 
   var Country = $resource(
@@ -25,7 +25,10 @@ function TourListController($scope, $resource) {
     {query: {isArray: true, transformResponse: parseResults}}
   );
 
-  $scope.tours = Tour.query();
-  $scope.countries = Country.query();
-  $scope.places = Place.query();
+  $q.all([Tour.query().$promise, Country.query().$promise, Place.query().$promise])
+    .then(function(result) {
+      $scope.tours = result[0];
+      $scope.countries = result[1];
+      $scope.places = result[2];
+    });
 }

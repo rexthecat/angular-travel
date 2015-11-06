@@ -19,7 +19,7 @@
     </div>
     <div class="media-body">
       <div class="clearfix">
-        <h3 class="media-heading pull-left"><a ng-href="/#/tours/{{tour.objectId}}">{{tour.title}}</a> <span class="label label-primary">{{tour.country}}</span> <span class="label label-danger">{{tour.place}}</span></h3>
+        <h3 class="media-heading pull-left"><a ng-href="/#/tours/{{tour.objectId}}">{{tour.title}}</a> <span class="label label-primary">{{tour.country}}</span> <span class="label label-danger">{{tour.place.name}}</span></h3>
         <big class="media-heading pull-right">{{tour.price | currency:"": 0}} &#8381;</big>
       </div>
       <p>{{tour.text}}</p>
