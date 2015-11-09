@@ -7,7 +7,7 @@ angular.module('tnTour', ['ngRoute', 'ngResource'])
     })
     .when('/admin/countries', {
       templateUrl: 'templates/admin_country_list.html',
-      controller: 'AdminCountryListController'
+      controller: 'AdminHotelListController'
     })
     .when('/admin/places', {
       templateUrl: 'templates/admin_place_list.html',
@@ -16,6 +16,10 @@ angular.module('tnTour', ['ngRoute', 'ngResource'])
     .when('/admin/tours', {
       templateUrl: 'templates/admin_tour_list.html',
       controller: 'AdminTourListController'
+    })
+    .when('/admin/hotels', {
+      templateUrl: 'templates/admin_hotel_list.html',
+      controller: 'AdminHotelListController'
     })
     .when('/tours/:id', {
       templateUrl: 'templates/tour.html',

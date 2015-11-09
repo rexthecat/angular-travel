@@ -1,0 +1,46 @@
+<main>
+  <div class="container">
+    <h1>Отели:</h1>
+    <form>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="form-group">
+            <input class="form-control" type="text" placeholder="Отель" ng-model="newHotel.title">
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="form-group">
+            <select class="form-control" ng-model="newHotel.stars" ng-options="star for star in stars">
+              <option value="">Количество звезд</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-default" type="button" ng-click="createHotel()">Добавить</button>
+      </div>
+    </form>
+    <table class="table">
+      <tr class="row" ng-repeat="hotel in hotels | orderBy: '-createdAt'">
+        <td>
+          <h4 class="pull-left" ng-hide="hotel.isInEdit">{{hotel.title}}</h4>
+          <input class="form-control pull-left" type="text" ng-model="hotel.title" ng-show="hotel.isInEdit">
+        </td>
+        <td class="col-xs-4">
+          <h4 class="pull-left" ng-hide="hotel.isInEdit">{{hotel.stars}}*</h4>
+          <select class="form-control" ng-model="hotel.stars" ng-options="star for star in stars" ng-show="hotel.isInEdit">
+            <option value="">Выберите страну</option>
+          </select>
+        </td>
+        <td>
+          <div class="button-group pull-right" ng-hide="hotel.isInEdit">
+            <button class="btn btn-link" type="button" ng-click="editHotel(hotel)">Редактировать</button>
+            <button class="btn btn-link" type="button" ng-click="deleteHotel(hotel)">Удалить</button>
+          </div>
+          <div class="button-group pull-right" ng-show="hotel.isInEdit">
+            <button class="btn btn-default" type="button" ng-click="saveChanges(hotel)">Сохранить</button>
+            <button class="btn btn-default" type="button" ng-click="cancelEdit(hotel)">Отмена</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</main>
