@@ -22,7 +22,7 @@ function TourListController($scope, $resource, $q) {
   var Place = $resource(
     'https://api.parse.com/1/classes/Place/:objectId',
     {objectId: '@objectId'},
-    {query: {isArray: true, transformResponse: parseResults}}
+    {query: {isArray: true, transformResponse: parseResults, params: {include: 'country'}}}
   );
 
   $q.all([Tour.query().$promise, Country.query().$promise, Place.query().$promise])

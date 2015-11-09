@@ -23,7 +23,7 @@ function AdminTourListController($scope, $resource, $q) {
   var Place = $resource(
     'https://api.parse.com/1/classes/Place/:objectId',
     {objectId: '@objectId'},
-    {query: {isArray: true, transformResponse: parseResults}}
+    {query: {isArray: true, transformResponse: parseResults, params: {include: 'country'}}}
   );
 
   $q.all([Tour.query().$promise, Country.query().$promise, Place.query().$promise])
@@ -35,6 +35,7 @@ function AdminTourListController($scope, $resource, $q) {
 
   $scope.showForm = false;
   $scope.newTour = createEmptyTour();
+  $scope.newCountry = {name: null};
   $scope.newPlace = {name: null, objectId: null};
 
   function createEmptyTour() {
@@ -55,8 +56,11 @@ function AdminTourListController($scope, $resource, $q) {
   $scope.createTour = function() {
     $scope.newTour.price = $scope.newTour.price || 0;
     $scope.newTour.duration = $scope.newTour.duration || 0;
-    $scope.newTour.place.name = $scope.newPlace.name;
-    $scope.newTour.place.objectId = $scope.newPlace.objectId;
+    $scope.newTour.country = $scope.newCountry.name;
+    $scope.newTour.place.__type = 'Pointer';
+    $scope.newTour.place.className = 'Place';
+    $scope.newTour.place.country.__type = 'Pointer';
+    $scope.newTour.place.country.className = 'Country';
 
     var tourToServer = new Tour($scope.newTour);
     tourToServer.$save().then(
@@ -65,6 +69,7 @@ function AdminTourListController($scope, $resource, $q) {
         $scope.tours.push(tourFromServer);
         $scope.newTour = createEmptyTour();
         $scope.newPlace = {name: null, objectId: null};
+        $scope.newCountry = {name: null};
       }
     ).catch(function(reason) {
         console.log('Error occurred ' + reason.data.error);
@@ -80,8 +85,6 @@ function AdminTourListController($scope, $resource, $q) {
   $scope.editTour = function(tour) {
     tour.hide = true;
     tour.currentTour = angular.copy(tour);
-    console.log(tour);
-    console.log($scope.places);
   };
 
   $scope.cancelEdit = function(tour) {

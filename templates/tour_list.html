@@ -2,12 +2,12 @@
   <div class="row">
     <div class="col-xs-4">
       <select class="form-control" ng-model="countryQuery" ng-options="country.name for country in countries">
-        <option value="">Страны</option>
+        <option value="">Все страны</option>
       </select>
     </div>
     <div class="col-xs-4">
-      <select class="form-control" ng-model="placeQuery" ng-options="p.name for p in places">
-        <option value="">Места</option>
+      <select class="form-control" ng-model="placeQuery" ng-options="p.name for p in places | filter: countryQuery.objectId">
+        <option value="">Все места</option>
       </select>
     </div>
   </div>
