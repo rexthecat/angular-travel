@@ -10,7 +10,7 @@ function TourListController($scope, $resource, $q) {
   var Tour = $resource(
     'https://api.parse.com/1/classes/Tour/:objectId',
     {objectId: '@objectId'},
-    {query: {isArray: true, transformResponse: parseResults, params: {include: 'place'}}}
+    {query: {isArray: true, transformResponse: parseResults, params: {include: 'place,hotel'}}}
   );
 
   var Country = $resource(

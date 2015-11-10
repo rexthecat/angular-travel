@@ -22,6 +22,7 @@
         <h3 class="media-heading pull-left"><a ng-href="/#/tours/{{tour.objectId}}">{{tour.title}}</a> <span class="label label-primary">{{tour.country}}</span> <span class="label label-danger">{{tour.place.name}}</span></h3>
         <big class="media-heading pull-right">{{tour.price | currency:"": 0}} &#8381;</big>
       </div>
+      <h4>{{tour.hotel.title}} {{tour.hotel.stars}}*</h4>
       <p>{{tour.text}}</p>
     </div>
   </div>
