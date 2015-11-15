@@ -16,15 +16,22 @@
     </div>
     <div class="row">
       <div class="form-group col-lg-4 col-md-4 col-xs-12">
-        <select class="form-control" ng-model="newCountry" ng-options="c.name as c.name for c in countries">
-          <option value="empty">Выберите страну</option>
+        <select class="form-control" ng-model="newCountry" ng-options="c.name for c in countries">
+          <option ng-hide="newTour.country" value="">Страна</option>
         </select>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-lg-4 col-md-4 col-xs-12">
-        <select class="form-control" ng-model="newPlace" ng-options="p.name as p.name for p in places">
-          <option value="empty">Выберите место</option>
+        <select class="form-control" ng-model="newTour.place" ng-options="p.name for p in places | filter: newCountry.objectId">
+          <option value="">Место</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-lg-4 col-md-4 col-xs-12">
+        <select class="form-control" ng-model="newTour.hotel" ng-options="hotel.title for hotel in hotels">
+          <option value="">Отель</option>
         </select>
       </div>
     </div>
@@ -61,12 +68,13 @@
     </div>
     <div class="media-body" ng-hide="tour.hide">
       <div class="clearfix">
-        <h3 class="media-heading pull-left">{{tour.title}} <span class="label label-primary">{{tour.country}}</span> <span class="label label-danger">{{tour.place}}</span></h3>
+        <h3 class="media-heading pull-left">{{tour.title}} <span class="label label-primary">{{tour.country}}</span> <span class="label label-danger">{{tour.place.name}}</span></h3>
         <big class="media-heading pull-right">{{tour.price | currency:"": 0}} &#8381;</big>
       </div>
+      <h4>{{tour.hotel.title}} {{tour.hotel.stars}}*</h4>
       <p>{{tour.text}}</p>
       <div class="clearfix">
-        <button class="btn btn-link pull-right" type="button" name="button" ng-click="deleteTour(tour, $index)">Удалить</button>
+        <button class="btn btn-link pull-right" type="button" name="button" ng-click="deleteTour(tour)">Удалить</button>
         <button class="btn btn-link pull-right" type="button" name="button" ng-click="editTour(tour)">Редактировать</button>
       </div>
     </div>
@@ -79,11 +87,20 @@
           <select class="form-control" ng-model="tour.country" ng-options="country.name as country.name for country in countries"></select>
         </div>
         <div class="form-group col-xs-3">
-          <select class="form-control" ng-model="tour.place" ng-options="p.name as p.name for p in places"></select>
+          <select class="form-control" ng-model="tour.place" ng-options="p.name for p in places | filter: tour.country track by p.objectId">
+            <option value=''>Выберите место</option>
+          </select>
         </div>
         <div class="form-group col-xs-3">
           <input class="form-control text-right" type="number" name="price" placeholder="Цена" ng-model="tour.price">
         </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-xs-4">
+          <select class="form-control" ng-model="tour.hotel" ng-options="hotel.title + ' ' + hotel.stars + '*' for hotel in hotels track by hotel.objectId"></select>
+        </div>
+      </div>
+      <div class="row">
         <div class="form-group col-xs-12">
           <textarea class="form-control" type="text" rows="4" ng-model="tour.text">{{tour.text}}</textarea>
         </div>

@@ -1,6 +1,6 @@
 angular.module('tnTour').controller('AdminTourListController', AdminTourListController);
 
-function AdminTourListController($scope, $resource) {
+function AdminTourListController($scope, $resource, $q) {
 
   function parseResults(data) {
     data = angular.fromJson(data);
@@ -10,9 +10,8 @@ function AdminTourListController($scope, $resource) {
   var Tour = $resource(
     'https://api.parse.com/1/classes/Tour/:objectId',
     {objectId: '@objectId'},
-    {query: {isArray: true, transformResponse: parseResults},
-      update: {method: 'PUT'}
-    }
+    {query: {isArray: true, transformResponse: parseResults, params: {include: 'place,hotel'}},
+      update: {method: 'PUT'}}
   );
 
   var Country = $resource(
@@ -24,40 +23,65 @@ function AdminTourListController($scope, $resource) {
   var Place = $resource(
     'https://api.parse.com/1/classes/Place/:objectId',
     {objectId: '@objectId'},
+    {query: {isArray: true, transformResponse: parseResults, params: {include: 'country'}}}
+  );
+
+  var Hotel = $resource(
+    'https://api.parse.com/1/classes/Hotel/:objectId',
+    {objectId: '@objectId'},
     {query: {isArray: true, transformResponse: parseResults}}
   );
 
-  $scope.showForm = false;
-  $scope.newTour = {title: null, country: null, text: null, price: null, duration: null};
-  $scope.tours = Tour.query();
-  $scope.countries = Country.query();
-  $scope.places = Place.query();
-  $scope.newCountry = {name: null};
-  $scope.newPlace = {name: null};
+  $q.all({
+    tours: Tour.query().$promise,
+    countries: Country.query().$promise,
+    places: Place.query().$promise,
+    hotels: Hotel.query().$promise
+  })
+    .then(function(results) {
+      $scope.tours = results.tours;
+      $scope.countries = results.countries;
+      $scope.places = results.places;
+      $scope.hotels = results.hotels;
+    });
 
-  function clearTourObj(obj) {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        obj[key] = null;
-      }
-    }
+  function setDataForTour(tour) {
+    tour.price = tour.price || 0;
+    tour.duration = tour.duration || 0;
+    tour.place.className = 'Place';
+    tour.place.__type = 'Pointer';
+    tour.hotel.className = 'Hotel';
+    tour.hotel.__type = 'Pointer';
+  }
+
+  $scope.showForm = false;
+  $scope.newTour = createEmptyTour();
+  $scope.newCountry = {name: null};
+  $scope.newPlace = {name: null, objectId: null};
+
+  function createEmptyTour() {
+    return {
+      title: null,
+      country: null,
+      place: {},
+      hotel: {},
+      text: null,
+      price: null,
+      duration: null};
   }
 
   $scope.createTour = function() {
-    $scope.newTour.price = $scope.newTour.price || 0;
-    $scope.newTour.duration = $scope.newTour.duration || 0;
-    $scope.newTour.country = $scope.newCountry;
-    $scope.newTour.place = $scope.newPlace;
-
+    $scope.newTour.country = $scope.newCountry.name;
+    setDataForTour($scope.newTour);
     var tourToServer = new Tour($scope.newTour);
+
     tourToServer.$save().then(
       function(tour) {
         var tourFromServer = angular.extend(tour, $scope.newTour);
         $scope.tours.push(tourFromServer);
-
-        clearTourObj($scope.newTour);
-        $scope.newCountry.name = null;
-        $scope.newPlace.name = null;
+        $scope.newTour = createEmptyTour();
+        $scope.newPlace = {name: null, objectId: null};
+        $scope.newCountry = {name: null};
       }
     ).catch(function(reason) {
         console.log('Error occurred ' + reason.data.error);
@@ -67,7 +91,7 @@ function AdminTourListController($scope, $resource) {
   $scope.cancelCreate = function() {
     $scope.showForm = !$scope.showForm;
 
-    clearTourObj($scope.newTour);
+    $scope.newTour = createEmptyTour();
   };
 
   $scope.editTour = function(tour) {
@@ -77,6 +101,7 @@ function AdminTourListController($scope, $resource) {
 
   $scope.cancelEdit = function(tour) {
     tour.hide = !tour.hide;
+
     tour.title = tour.currentTour.title;
     tour.country = tour.currentTour.country;
     tour.place = tour.currentTour.place;
@@ -91,11 +116,10 @@ function AdminTourListController($scope, $resource) {
     delete tour.hide;
     delete tour.currentTour;
 
+    setDataForTour(tour);
     var tourToServer = new Tour(tour);
     tourToServer.$update().then(
       function(respTour) {
-        //var index = $scope.tours.indexOf(tour);
-        //$scope.tours[index] = tour;
         tour = respTour;
       }).catch(function(reason) {
         console.log('Error occurred: ' + reason.error);

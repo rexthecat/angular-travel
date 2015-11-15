@@ -1,11 +1,18 @@
 <main>
   <div class="container">
-    <h1>Страны:</h1>
+    <h1>Места:</h1>
     <form>
       <div class="row">
         <div class="col-xs-4">
           <div class="form-group">
-            <input class="form-control" type="text" placeholder="Места" ng-model="newPlace.name">
+            <input class="form-control" type="text" placeholder="Место" ng-model="newPlace.name">
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="form-group">
+            <select class="form-control" ng-model="newPlace.country" ng-options="country.name for country in countries">
+              <option value="">Страны</option>
+            </select>
           </div>
         </div>
         <button class="btn btn-default" type="button" ng-click="createPlace()">Добавить</button>
@@ -13,9 +20,15 @@
     </form>
     <table class="table">
       <tr class="row" ng-repeat="place in places | orderBy: '-createdAt'">
-        <td>
+        <td class="col-xs-4">
           <h4 class="pull-left" ng-hide="place.isInEdit">{{place.name}}</h4>
           <input class="form-control pull-left" type="text" ng-model="place.name" ng-show="place.isInEdit">
+        </td>
+        <td class="col-xs-4">
+          <h4 class="pull-left" ng-hide="place.isInEdit">{{place.country.name}}</h4>
+          <select class="form-control" ng-model="place.country" ng-options="c.name for c in countries track by c.objectId" ng-show="place.isInEdit">
+            <option value="">Выберите страну</option>
+          </select>
         </td>
         <td>
           <div class="button-group pull-right" ng-hide="place.isInEdit">
