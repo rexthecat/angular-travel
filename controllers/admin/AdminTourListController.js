@@ -32,13 +32,27 @@ function AdminTourListController($scope, $resource, $q) {
     {query: {isArray: true, transformResponse: parseResults}}
   );
 
-  $q.all([Tour.query().$promise, Country.query().$promise, Place.query().$promise, Hotel.query().$promise])
-    .then(function(result) {
-      $scope.tours = result[0];
-      $scope.countries = result[1];
-      $scope.places = result[2];
-      $scope.hotels = result[3];
+  $q.all({
+    tours: Tour.query().$promise,
+    countries: Country.query().$promise,
+    places: Place.query().$promise,
+    hotels: Hotel.query().$promise
+  })
+    .then(function(results) {
+      $scope.tours = results.tours;
+      $scope.countries = results.countries;
+      $scope.places = results.places;
+      $scope.hotels = results.hotels;
     });
+
+  function setDataForTour(tour) {
+    tour.price = tour.price || 0;
+    tour.duration = tour.duration || 0;
+    tour.place.className = 'Place';
+    tour.place.__type = 'Pointer';
+    tour.hotel.className = 'Hotel';
+    tour.hotel.__type = 'Pointer';
+  }
 
   $scope.showForm = false;
   $scope.newTour = createEmptyTour();
@@ -57,17 +71,10 @@ function AdminTourListController($scope, $resource, $q) {
   }
 
   $scope.createTour = function() {
-    $scope.newTour.price = $scope.newTour.price || 0;
-    $scope.newTour.duration = $scope.newTour.duration || 0;
     $scope.newTour.country = $scope.newCountry.name;
-    $scope.newTour.place.__type = 'Pointer';
-    $scope.newTour.place.className = 'Place';
-    $scope.newTour.place.country.__type = 'Pointer';
-    $scope.newTour.place.country.className = 'Country';
-    $scope.newTour.hotel.__type = 'Pointer';
-    $scope.newTour.hotel.className = 'Hotel';
-
+    setDataForTour($scope.newTour);
     var tourToServer = new Tour($scope.newTour);
+
     tourToServer.$save().then(
       function(tour) {
         var tourFromServer = angular.extend(tour, $scope.newTour);
@@ -109,10 +116,7 @@ function AdminTourListController($scope, $resource, $q) {
     delete tour.hide;
     delete tour.currentTour;
 
-    tour.place.className = 'Place';
-    tour.place.__type = 'Pointer';
-    tour.hotel.className = 'Hotel';
-    tour.hotel.__type = 'Pointer';
+    setDataForTour(tour);
     var tourToServer = new Tour(tour);
     tourToServer.$update().then(
       function(respTour) {

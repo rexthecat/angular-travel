@@ -25,10 +25,14 @@ function TourListController($scope, $resource, $q) {
     {query: {isArray: true, transformResponse: parseResults, params: {include: 'country'}}}
   );
 
-  $q.all([Tour.query().$promise, Country.query().$promise, Place.query().$promise])
-    .then(function(result) {
-      $scope.tours = result[0];
-      $scope.countries = result[1];
-      $scope.places = result[2];
+  $q.all({
+    tours: Tour.query().$promise,
+    country: Country.query().$promise,
+    place: Place.query().$promise
+  })
+    .then(function(results) {
+      $scope.tours = results.tours;
+      $scope.countries = results.countries;
+      $scope.places = results.places;
     });
 }

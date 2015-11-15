@@ -20,17 +20,24 @@ function AdminPlaceListController($scope, $resource, $q) {
       update: {method: 'PUT'}}
   );
 
-  $q.all([Place.query().$promise, Country.query().$promise])
-    .then(function(result) {
-      $scope.places = result[0];
-      $scope.countries = result[1];
+  $q.all({
+    places: Place.query().$promise,
+    countries: Country.query().$promise
+  })
+    .then(function(results) {
+      $scope.places = results.places;
+      $scope.countries = results.countries;
     });
+
+  function setDataForPlace(place) {
+    place.country.__type = 'Pointer';
+    place.country.className = 'Country';
+  }
 
   $scope.newPlace = {name: null};
 
   $scope.createPlace = function() {
-    $scope.newPlace.country.__type = 'Pointer';
-    $scope.newPlace.country.className = 'Country';
+    setDataForPlace($scope.newPlace);
     var placeToServer = new Place($scope.newPlace);
 
     placeToServer.$save().then(
@@ -62,8 +69,7 @@ function AdminPlaceListController($scope, $resource, $q) {
     delete place.isInEdit;
     delete place.currentPlace;
 
-    place.country.__type = 'Pointer';
-    place.country.className = 'Country';
+    setDataForPlace(place);
     var placeToServer = new Place(place);
 
     placeToServer.$update().then(

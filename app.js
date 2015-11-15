@@ -31,7 +31,7 @@ angular.module('tnTour', ['ngRoute', 'ngResource'])
   $locationProvider.html5Mode(true);
 
   $httpProvider.defaults.headers.common = {
-    "X-Parse-Application-Id": "",
-    "X-Parse-REST-API-Key": ""
+    "X-Parse-Application-Id": "rYGxvNNOxq1t4VfJNvgfa6UM30Cv5yZh4oX6Ql1B",
+    "X-Parse-REST-API-Key": "FioOKP3q1nx5O8e92cx4WNiSEeeudH1lg7Br15x9"
   };
 });
