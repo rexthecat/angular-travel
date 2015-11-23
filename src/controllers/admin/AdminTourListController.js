@@ -58,6 +58,7 @@ function AdminTourListController($scope, $resource, $q) {
   $scope.newTour = createEmptyTour();
   $scope.newCountry = {name: null};
   $scope.newPlace = {name: null, objectId: null};
+  $scope.errorMessage = null;
 
   function createEmptyTour() {
     return {
@@ -84,7 +85,7 @@ function AdminTourListController($scope, $resource, $q) {
         $scope.newCountry = {name: null};
       }
     ).catch(function(reason) {
-        console.log('Error occurred ' + reason.data.error);
+        $scope.errorMessage = 'Error occurred trying to create a tour';
       });
   };
 
@@ -122,7 +123,7 @@ function AdminTourListController($scope, $resource, $q) {
       function(respTour) {
         tour = respTour;
       }).catch(function(reason) {
-        console.log('Error occurred: ' + reason.error);
+        $scope.errorMessage = 'Error occurred trying to save changes';
       });
   };
 
@@ -133,7 +134,7 @@ function AdminTourListController($scope, $resource, $q) {
         var index = $scope.tours.indexOf(tour);
         $scope.tours.splice(index, 1);
       }).catch(function (reason) {
-        console.log('Error occurred ' + reason.data.error);
+        $scope.errorMessage = 'Error occurred trying to delete tour';
       });
   };
 }
