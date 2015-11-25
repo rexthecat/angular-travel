@@ -4,37 +4,19 @@ describe('AdminTourListController', function() {
   var $scope = {};
   var $httpBackend = null;
   var url = 'https://api.parse.com/1/classes/';
+  var hotel = {stars: 3, title: 'Pirate Bay Hotel Resort and SPA'};
+  var country = {name: 'США'};
+  var place = {name: 'Рокфеллер-центр', country: country};
+  var emptyTour = {title: null, country: null, place: {}, hotel: {}, text: null, price: null, duration: null};
 
   var tour = {
     country: 'США',
     title: 'The Mirage',
     duration: 7,
-    hotel: {
-      stars: 3,
-      title: 'Pirate Bay Hotel Resort and SPA'
-    },
-    place: {
-      name: 'Рокфеллер-центр',
-      country: {name: 'США'}
-    },
+    hotel: hotel,
+    place: place,
     price: 150000,
     text: 'Lorem ipsum dolor sit amet, consectetur adipisicing!'
-  };
-
-  var hotel = {
-    stars: 3,
-    title: 'Pirate Bay Hotel Resort and SPA'
-  };
-
-  var country = {
-    name: 'США'
-  };
-
-  var place = {
-    name: 'Рокфеллер-центр',
-    country: {
-      name: 'США'
-    }
   };
 
   beforeEach(inject(function($controller, _$httpBackend_) {
@@ -62,34 +44,33 @@ describe('AdminTourListController', function() {
       expect($httpBackend.verifyNoOutstandingExpectation).not.toThrow();
     });
 
-    it('should set $scope.tours to an array of tours with mock http request', function () {
+    it('should set $scope.tours to an array of tours with mock http request', function() {
       $httpBackend.flush();
       expect($scope.tours.length).toBe(1);
       var localTour = $scope.tours[0];
-      expect($scope.tours.length).toBe(1);
-      expect(localTour.title).toBe('The Mirage');
-      expect(localTour.hotel.stars).toBe(3);
+      expect(localTour.title).toBe(tour.title);
+      expect(localTour.hotel.stars).toBe(tour.hotel.stars);
     });
 
-    it('should set $scope.countries to an array of countries with mock http request', function () {
+    it('should set $scope.countries to an array of countries with mock http request', function() {
       $httpBackend.flush();
       expect($scope.countries.length).toBe(1);
       var localCountry = $scope.countries[0];
-      expect(localCountry.name).toBe('США');
+      expect(localCountry.name).toBe(country.name);
     });
 
-    it('should set $scope.hotels to an array of hotels with mock http request', function () {
+    it('should set $scope.hotels to an array of hotels with mock http request', function() {
       $httpBackend.flush();
       expect($scope.hotels.length).toBe(1);
       var localHotel = $scope.hotels[0];
-      expect(localHotel.title).toBe('Pirate Bay Hotel Resort and SPA');
+      expect(localHotel.title).toBe(hotel.title);
     });
 
-    it('should set $scope.places to an array of places with mock http request', function () {
+    it('should set $scope.places to an array of places with mock http request', function() {
       $httpBackend.flush();
       expect($scope.places.length).toBe(1);
       var localPlace = $scope.places[0];
-      expect(localPlace.name).toBe('Рокфеллер-центр');
+      expect(localPlace.name).toBe(place.name);
     });
   });
 
@@ -132,14 +113,7 @@ describe('AdminTourListController', function() {
       $scope.newTour = tour;
       $scope.cancelCreate();
       expect($scope.showForm).toBe(false);
-      expect($scope.newTour).toEqual({
-        title: null,
-        country: null,
-        place: {},
-        hotel: {},
-        text: null,
-        price: null,
-        duration: null});
+      expect($scope.newTour).toEqual(emptyTour);
     });
   });
 
@@ -158,14 +132,16 @@ describe('AdminTourListController', function() {
   describe('$scope.cancelEdit', function() {
     it('should set $scope.hide to false and cancel changes of tour', function() {
       var expectedTour = angular.copy(tour);
+      var newTourCountryName = 'Россия';
+      var newTourDuration = 14;
       expectedTour.hide = false;
 
       var testTour = angular.copy(tour);
 
       $scope.editTour(testTour);
 
-      testTour.title = 'Россия';
-      testTour.duration = 14;
+      testTour.title = newTourCountryName;
+      testTour.duration = newTourDuration;
 
       $scope.cancelEdit(testTour);
       expect(testTour).toEqual(expectedTour);
@@ -190,21 +166,15 @@ describe('AdminTourListController', function() {
 
     it('should update the tour', function() {
       var testTour = angular.copy(tour);
-      testTour.hide = true;
-      testTour.currentTour = angular.copy(tour);
+      $scope.editTour(testTour);
 
-      testTour.country = 'Россия';
-      testTour.duration = 14;
-
-      var expectedTour = angular.copy(testTour);
+      var expectedTour = angular.copy(tour);
       expectedTour.price = expectedTour.price || 0;
       expectedTour.duration = expectedTour.duration || 0;
       expectedTour.place.className = 'Place';
       expectedTour.place.__type = 'Pointer';
       expectedTour.hotel.className = 'Hotel';
       expectedTour.hotel.__type = 'Pointer';
-      delete expectedTour.hide;
-      delete expectedTour.currentTour;
 
       $httpBackend.whenPUT(url + 'Tour').respond(200);
       $scope.saveChanges(testTour);
@@ -214,16 +184,14 @@ describe('AdminTourListController', function() {
 
   describe('deleteTour', function() {
     it('should make DELETE request to parse.com', function() {
-      var testTour = angular.copy(tour);
       $httpBackend.expectDELETE(url + 'Tour').respond(200);
-      $scope.deleteTour(testTour);
+      $scope.deleteTour(tour);
       expect($httpBackend.verifyNoOutstandingExpectation).not.toThrow();
     });
 
     it('sets error about failed request', function() {
-      var testTour = angular.copy(tour);
       $httpBackend.whenDELETE(url + 'Tour').respond(400);
-      $scope.deleteTour(testTour);
+      $scope.deleteTour(tour);
       $httpBackend.flush();
       expect($scope.errorMessage).toBe('Error occurred trying to delete tour');
     });

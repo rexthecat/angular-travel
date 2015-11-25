@@ -4,18 +4,16 @@ describe('TourController', function() {
   var $scope = {};
   var $httpBackend = null;
   var url = 'https://api.parse.com/1/classes/';
+  var hotel = {stars: 3, title: 'Pirate Bay Hotel Resort and SPA'};
+  var country = {name: 'США'};
+  var place = {name: 'Рокфеллер-центр', country: country};
+
   var tour = {
     country: 'США',
     title: 'The Mirage',
     duration: 7,
-    hotel: {
-      stars: 3,
-      title: 'Pirate Bay Hotel Resort and SPA'
-    },
-    place: {
-      name: 'Рокфеллер-центр',
-      country: {name: 'США'}
-    },
+    hotel: hotel,
+    place: place,
     price: 150000,
     text: 'Lorem ipsum dolor sit amet, consectetur adipisicing!'
   };
@@ -28,16 +26,16 @@ describe('TourController', function() {
 
   describe('initialize controller', function() {
 
-    it('should call to parse.com', function () {
+    it('should call to parse.com', function() {
       $httpBackend.expectGET(url + 'Tour?include=place,hotel').respond(200);
       expect($httpBackend.verifyNoOutstandingExpectation).not.toThrow();
     });
 
-    it('should set $scope.tour to an array of tours with mock http request', function () {
+    it('should set $scope.tour to an array of tours with mock http request', function() {
       $httpBackend.flush();
       expect($scope.tour).toBeDefined();
-      expect($scope.tour.title).toBe('The Mirage');
-      expect($scope.tour.hotel.stars).toBe(3);
+      expect($scope.tour.title).toBe(tour.title);
+      expect($scope.tour.hotel.stars).toBe(tour.hotel.stars);
     });
   });
 });
