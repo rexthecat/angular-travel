@@ -1,4 +1,4 @@
-angular.module('tnTour', ['ngRoute', 'ngResource'])
+angular.module('tnTour', ['ngRoute', 'ngResource', 'ngFileUpload'])
 .config(function($routeProvider, $locationProvider, $httpProvider) {
   $routeProvider
     .when('/', {

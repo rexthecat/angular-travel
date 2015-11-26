@@ -5,7 +5,7 @@ var connectHistoryApiFallback = require('connect-history-api-fallback');
 gulp.task('browser-sync', function() {
   browserSync.init({
     server: {
-      baseDir: './',
+      baseDir: './src',
       middleware: [connectHistoryApiFallback()]
     }
   });

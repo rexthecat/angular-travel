@@ -27,8 +27,8 @@ function TourListController($scope, $resource, $q) {
 
   $q.all({
     tours: Tour.query().$promise,
-    country: Country.query().$promise,
-    place: Place.query().$promise
+    countries: Country.query().$promise,
+    places: Place.query().$promise
   })
     .then(function(results) {
       $scope.tours = results.tours;
